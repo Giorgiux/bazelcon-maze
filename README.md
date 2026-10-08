@@ -1,8 +1,7 @@
 # Maze
 
 A small, self-contained Bazel + Java project: a playable browser maze game whose
-build graph doubles as a sandbox for build-performance questions, where the
-critical path is, how much parallelism is available, and when work is being redone.
+build graph doubles as a sandbox for the bazelCon training on _how fast should/can my builds be?
 
 Levels are generated at build time by a seeded Java maze generator, assembled into
 a static site, and played in the browser. No runtime server, no third-party
@@ -43,6 +42,4 @@ Run the tests:
 
 ## Notes
 
-The graph intentionally exercises the shapes that matter for build speed: a serial
-pipeline, a high fan-out core library, a heavy leaf target, and optional build
-stamping. `docs/optimization-decision-tree.md` walks through diagnosing them.
+The repo intentionally has optimization issues so that training attendees can identify issues and understand the core concepts.
