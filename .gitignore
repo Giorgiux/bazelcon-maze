@@ -1,0 +1,12 @@
+# Bazel convenience symlinks
+/bazel-*
+
+# Build-performance experiment output (profiles, logs, exec logs)
+/.optimal_build_check/
+
+# Python
+__pycache__/
+*.pyc
+
+# Slides / exported docs
+*.pdf

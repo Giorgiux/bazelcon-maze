@@ -1,0 +1,11 @@
+load("@rules_java//java:defs.bzl", "java_binary")
+
+# CLI used by the level genrules: args are `seed width height [numKeys] [name]
+# [passes]` and it prints one level as JSON on stdout. Depends on //engine.
+java_binary(
+    name = "mapgen",
+    srcs = ["MapGen.java"],
+    main_class = "tools.mapgen.MapGen",
+    visibility = ["//visibility:public"],
+    deps = ["//engine"],
+)

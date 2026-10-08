@@ -1,0 +1,18 @@
+# The game runtime is plain checked-in vanilla JS/HTML/CSS. No web build
+# toolchain (no npm/esbuild/webpack) by design: Java is the build engine, and
+# the game is just static files assembled by Bazel genrules.
+exports_files([
+    "index.html",
+    "game.js",
+    "style.css",
+])
+
+# Build stamp shown on the title screen (version.js). It records the build time;
+# since the genrule has no inputs, Bazel caches it, so the displayed time is the
+# time of the first build.
+genrule(
+    name = "buildstamp",
+    outs = ["version.js"],
+    cmd = """echo 'window.BUILD_VERSION = "'$$(date -u +%Y-%m-%dT%H:%M:%SZ)'";' > $@""",
+    visibility = ["//visibility:public"],
+)

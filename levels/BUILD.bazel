@@ -1,0 +1,28 @@
+# Maze levels, generated at build time by //tools/mapgen from fixed seeds (so
+# output is deterministic). A few are wired into the game (see //game); the rest
+# ship as an extra level pack.
+
+NUM_LEVELS = 60
+
+# Generation passes per level.
+LEVEL_ITERS = 12000
+
+[
+    genrule(
+        name = "level_%d" % i,
+        outs = ["level_%d.json" % i],
+        cmd = "$(location //tools/mapgen) %d 61 61 5 level_%d %d > $@" % (i, i, LEVEL_ITERS),
+        tools = ["//tools/mapgen"],
+        visibility = ["//visibility:public"],
+    )
+    for i in range(1, NUM_LEVELS + 1)
+]
+
+# A large "big world" level: a bigger grid with more generation detail.
+genrule(
+    name = "bigworld",
+    outs = ["bigworld.json"],
+    cmd = "$(location //tools/mapgen) 999 801 801 50 bigworld 200 > $@",
+    tools = ["//tools/mapgen"],
+    visibility = ["//visibility:public"],
+)

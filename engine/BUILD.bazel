@@ -1,0 +1,20 @@
+load("@rules_java//java:defs.bzl", "java_library")
+load(":stamp.bzl", "build_info")
+
+# Build metadata (a timestamp) compiled into the engine so the game can show a
+# build identifier on its title screen.
+build_info(
+    name = "build_info",
+    volatile = True,
+)
+
+# Core maze engine: level models, the seeded carving algorithm, and JSON
+# serialization. Most of the game and tooling depends on this library.
+java_library(
+    name = "engine",
+    srcs = [
+        "Engine.java",
+        ":build_info",
+    ],
+    visibility = ["//visibility:public"],
+)

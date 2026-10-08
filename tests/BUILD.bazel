@@ -1,0 +1,14 @@
+load("@rules_java//java:defs.bzl", "java_test")
+
+# Stress test for the maze engine: runs many generation + validation cases.
+# shard_count splits the cases across parallel test processes.
+java_test(
+    name = "maze_stress_test",
+    srcs = ["MazeStressTest.java"],
+    main_class = "tests.MazeStressTest",
+    use_testrunner = False,
+    deps = ["//engine"],
+    shard_count = 1,
+    size = "large",  # many cases; needs the large timeout
+    visibility = ["//visibility:public"],
+)

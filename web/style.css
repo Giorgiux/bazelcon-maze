@@ -1,0 +1,73 @@
+:root {
+  --bg: #0f1420;
+  --panel: #171e2e;
+  --ink: #e7ecf5;
+  --muted: #8894ad;
+  --accent: #5aa9ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+#app {
+  background: var(--panel);
+  padding: 20px 24px 16px;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  width: max-content;
+}
+
+header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+}
+
+#hud {
+  display: flex;
+  gap: 16px;
+  color: var(--muted);
+}
+
+#keys-count {
+  color: var(--ink);
+}
+
+canvas {
+  display: block;
+  background: #0b0f18;
+  border-radius: 8px;
+  image-rendering: pixelated;
+}
+
+#status {
+  margin: 12px 0 4px;
+  color: var(--muted);
+  min-height: 1.5em;
+}
+
+footer {
+  color: var(--muted);
+  font-size: 12px;
+  opacity: 0.7;
+}

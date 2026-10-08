@@ -1,0 +1,54 @@
+# The "campaign" generation pipeline. Each stage builds on the previous stage's
+# output (base map -> corridors -> rooms -> enemies -> loot -> final), so the
+# stages run in sequence. The final stage is a playable campaign level.
+
+_ITERS = "8000"  # generation passes per stage
+
+genrule(
+    name = "stage_1_base",
+    outs = ["stage_1.json"],
+    cmd = "$(location //tools/mapgen) 101 61 61 4 campaign " + _ITERS + " > $@",
+    tools = ["//tools/mapgen"],
+)
+
+genrule(
+    name = "stage_2_corridors",
+    srcs = [":stage_1_base"],
+    outs = ["stage_2.json"],
+    cmd = "$(location //tools/mapgen) 102 61 61 5 campaign " + _ITERS + " > $@",
+    tools = ["//tools/mapgen"],
+)
+
+genrule(
+    name = "stage_3_rooms",
+    srcs = [":stage_2_corridors"],
+    outs = ["stage_3.json"],
+    cmd = "$(location //tools/mapgen) 103 61 61 6 campaign " + _ITERS + " > $@",
+    tools = ["//tools/mapgen"],
+)
+
+genrule(
+    name = "stage_4_enemies",
+    srcs = [":stage_3_rooms"],
+    outs = ["stage_4.json"],
+    cmd = "$(location //tools/mapgen) 104 61 61 7 campaign " + _ITERS + " > $@",
+    tools = ["//tools/mapgen"],
+)
+
+genrule(
+    name = "stage_5_loot",
+    srcs = [":stage_4_enemies"],
+    outs = ["stage_5.json"],
+    cmd = "$(location //tools/mapgen) 105 61 61 8 campaign " + _ITERS + " > $@",
+    tools = ["//tools/mapgen"],
+)
+
+# Final stage: the playable campaign level. Depends on the whole chain above.
+genrule(
+    name = "campaign",
+    srcs = [":stage_5_loot"],
+    outs = ["campaign.json"],
+    cmd = "$(location //tools/mapgen) 106 61 61 9 campaign " + _ITERS + " > $@",
+    tools = ["//tools/mapgen"],
+    visibility = ["//visibility:public"],
+)

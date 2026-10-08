@@ -1,0 +1,60 @@
+# Final assembly: turns the generated level JSON into a JS file the game loads,
+# then stages the complete static site. Open the output index.html to play.
+
+# The level sequence the game ships with: a few standalone mazes, then the
+# campaign level from //pipeline.
+PLAYABLE = [
+    "//levels:level_1",
+    "//levels:level_2",
+    "//levels:level_3",
+    "//levels:level_4",
+    "//levels:level_5",
+    "//pipeline:campaign",
+]
+
+# Concatenate the level JSON into `window.LEVELS = [...]` so the game loads them
+# with no fetch(). $(SRCS) preserves PLAYABLE order.
+genrule(
+    name = "levels_js",
+    srcs = PLAYABLE,
+    outs = ["levels.js"],
+    cmd = """
+echo 'window.LEVELS = [' > $@
+sep=''
+for f in $(SRCS); do
+  echo "$$sep" >> $@
+  cat "$$f" >> $@
+  sep=','
+done
+echo '];' >> $@
+""",
+)
+
+# Stage the web files + generated levels.js + the version stamp into a single
+# directory under bazel-bin/game/site/. Open its index.html to play.
+genrule(
+    name = "site",
+    srcs = [
+        "//web:index.html",
+        "//web:game.js",
+        "//web:style.css",
+        ":levels_js",
+        "//web:buildstamp",
+    ],
+    outs = [
+        "site/index.html",
+        "site/game.js",
+        "site/style.css",
+        "site/levels.js",
+        "site/version.js",
+    ],
+    cmd = " && ".join([
+        "mkdir -p $(RULEDIR)/site",
+        "cp $(location //web:index.html) $(RULEDIR)/site/index.html",
+        "cp $(location //web:game.js) $(RULEDIR)/site/game.js",
+        "cp $(location //web:style.css) $(RULEDIR)/site/style.css",
+        "cp $(location :levels_js) $(RULEDIR)/site/levels.js",
+        "cp $(location //web:buildstamp) $(RULEDIR)/site/version.js",
+    ]),
+    visibility = ["//visibility:public"],
+)

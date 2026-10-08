@@ -1,0 +1,13 @@
+# Hermetic Java toolchain: Bazel fetches a remote JDK for both building and
+# running Java, so no local JDK install is required.
+common --java_language_version=21
+common --java_runtime_version=remotejdk_21
+common --tool_java_language_version=21
+common --tool_java_runtime_version=remotejdk_21
+
+# Fully serial build (handy when debugging action ordering).
+build:serial --jobs=1
+
+# Stamp build metadata (see tools/workspace_status.sh) so the engine can show a
+# build identifier on the game's title screen.
+build --workspace_status_command=tools/workspace_status.sh
