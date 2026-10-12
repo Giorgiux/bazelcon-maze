@@ -83,6 +83,14 @@ def parse_exec_log(path):
     return out
 
 
+def bare_action_name(name):
+    """Critical-path events name actions as "action '<desc>'" while
+    action-processing events use the bare "<desc>". Normalize to the bare form
+    so the two can be compared."""
+    m = re.match(r"^action '(.*)'$", name)
+    return m.group(1) if m else name
+
+
 def parse_profile(path):
     """Returns (critical_path_names, actions, peak_concurrency)."""
     crit_names, actions, peak = set(), [], 0
@@ -105,7 +113,7 @@ def parse_profile(path):
             name = e.get("name", "")
             dur = e.get("dur", 0) / 1e6  # microseconds -> seconds
             if tname == "Critical Path":
-                crit_names.add(name)
+                crit_names.add(bare_action_name(name))
             else:
                 cat = e.get("cat", "")
                 if cat not in skip_cats and dur > 0:
@@ -239,7 +247,7 @@ def main():
         top_actions.append({
             "name": a["name"],
             "dur_s": round(a["dur"], 3),
-            "on_critical_path": a["name"] in crit_names,
+            "on_critical_path": bare_action_name(a["name"]) in crit_names,
         })
 
     spawns = parse_exec_log(os.path.join(run_dir, "exec_jobs_1.json"))
