@@ -1,5 +1,6 @@
 # Maze
 
+https://docs.google.com/presentation/d/1cfmUy8sbpXUm3MJgjpAriPopggrKlZLLU09m0Jeqs2k/edit?slide=id.h63c73eaee5858a97_0_1606#slide=id.h63c73eaee5858a97_0_1606 
 A small, self-contained Bazel + Java project: a playable browser maze game whose
 build graph doubles as a sandbox for the bazelCon training on _how fast should/can my builds be?
 
